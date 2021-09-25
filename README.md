@@ -3,4 +3,10 @@
 
 The easy-yaml parses YAML files and generates a tree of linked nodes.
 Navigating or querying this tree is very easy using the provided API.
-This module uses LIBYAML.
+This module uses [LIBYAML](https://github.com/yaml/libyaml).
+
+Route map:
+
+- [ ] Find YMAL nodes and values by their paths
+- [ ] Support alias event
+- [ ] Create new YAML trees and edit

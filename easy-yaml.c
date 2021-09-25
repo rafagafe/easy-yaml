@@ -125,29 +125,29 @@ enum eyamltype eyaml_type(struct eyaml* self) {
 
     if ( istype(self, YAML_SCALAR_EVENT, YAML_SCALAR_EVENT, YAML_NO_EVENT) ||
          istype(self, YAML_SCALAR_EVENT, YAML_NO_EVENT, YAML_NO_EVENT) )
-        return YAML_SCALAR;
+        return EYAML_SCALAR;
 
     if ( istype(self, YAML_SCALAR_EVENT, YAML_MAPPING_START_EVENT, YAML_MAPPING_END_EVENT) ||
          istype(self, YAML_MAPPING_START_EVENT, YAML_MAPPING_END_EVENT, YAML_NO_EVENT) )
-        return YAML_MAPPING;
+        return EYAML_MAPPING;
 
-    return YAML_SEQUENCE;
+    return EYAML_SEQUENCE;
 }
 
-/* Search in a mpping member node by its name */
+/* Search in a mapping member node by its name */
 struct eyaml* eyaml_name2child(struct eyaml* self, char const* name) {
     int isdoc = istype(self, YAML_DOCUMENT_START_EVENT, YAML_DOCUMENT_END_EVENT, YAML_NO_EVENT);
     if (isdoc)
         self = self->child;
-    if ( YAML_MAPPING != eyaml_type(self) )
+    if ( EYAML_MAPPING != eyaml_type(self) )
         return NULL;
-    for(struct eyaml* i = self->child; i; i = i->sibling)
+    for(struct eyaml* i = self->child; NULL != i; i = i->sibling)
         if (0 == strcmp(name, (char*)i->events[0].data.scalar.value))
             return i;
     return NULL;
 }
 
-/* Search in a mpping or sequence member node by its index */
+/* Search in a mapping or sequence member node by its index */
 struct eyaml* eyaml_index2child(struct eyaml* self, int index) {
     if ( istype(self, YAML_SCALAR_EVENT, YAML_SCALAR_EVENT, YAML_NO_EVENT) ||
          istype(self, YAML_SCALAR_EVENT, YAML_NO_EVENT, YAML_NO_EVENT) )
@@ -166,7 +166,7 @@ struct eyaml* eyaml_index2child(struct eyaml* self, int index) {
     return child;
 }
 
-/* Get the next siblibg of a easy-yaml node */
+/* Get the next sibling of a easy-yaml node */
 struct eyaml* eyaml_sibling(struct eyaml* self) {
     return self->sibling;
 }
@@ -205,7 +205,7 @@ char const* eyaml_value(struct eyaml* self) {
     int isdoc = istype(self, YAML_DOCUMENT_START_EVENT, YAML_DOCUMENT_END_EVENT, YAML_NO_EVENT);
     if (isdoc)
         self = self->child;
-    if (YAML_SCALAR != eyaml_type(self))
+    if (EYAML_SCALAR != eyaml_type(self))
         return NULL;
     int index = YAML_SCALAR_EVENT == self->events[1].type ? 1 : 0;
     return (char*)self->events[index].data.scalar.value;
@@ -289,7 +289,7 @@ int eyaml_emit(struct eyaml* self, FILE* strm) {
         int shouldclose = 0;
         struct eyaml* node = stack_pick(&nodes);
 
-        if (eyaml_type(node) == YAML_SCALAR) {
+        if (eyaml_type(node) == EYAML_SCALAR) {
             stack_pop(&nodes);
             struct eyaml* sibling = eyaml_sibling(node);
             if (NULL != sibling)
@@ -358,7 +358,7 @@ static void printClosingEvents(struct eyaml* self, int* level) {
     }
 }
 
-
+/* Print in stdout debug info */
 void eyaml_debug(struct eyaml* self) {
 
 
@@ -376,7 +376,7 @@ void eyaml_debug(struct eyaml* self) {
         int shouldclose = 0;
         struct eyaml* node = stack_pick(&nodes);
 
-        if (eyaml_type(node) == YAML_SCALAR) {
+        if (eyaml_type(node) == EYAML_SCALAR) {
             stack_pop(&nodes);
             struct eyaml* sibling = eyaml_sibling(node);
             if (NULL != sibling)
@@ -410,6 +410,7 @@ void eyaml_debug(struct eyaml* self) {
 
 }
 
+/* Parse a YAML stream */
 int eyaml_parse(struct eyaml** dest, FILE* src) {
 
     struct stack wip; // the stack to store Work In Progress yaml nodes

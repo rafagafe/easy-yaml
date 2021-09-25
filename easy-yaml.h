@@ -1,6 +1,6 @@
 
-#ifndef EASY_YALM_H
-#define EASY_YALM_H
+#ifndef EASY_YAML_H
+#define EASY_YAML_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,13 +19,13 @@ struct eyaml;
 
 /** Type of data that the easy-yaml nodes can hold */
 enum eyamltype {
-    YAML_SCALAR,
-    YAML_MAPPING,
-    YAML_SEQUENCE
+    EYAML_SCALAR,
+    EYAML_MAPPING,
+    EYAML_SEQUENCE
 };
 
 /** Parse a YAML stream
-  * @param [out] root Destination esay-yaml handle
+  * @param [out] root Destination easy-yaml handle
   * @param [in]  src  Source stream
   * @return Zero on success, non-zero on error */
 int eyaml_parse(struct eyaml** root, FILE* src);
@@ -34,19 +34,19 @@ int eyaml_parse(struct eyaml** root, FILE* src);
   * @param root The root of the tree */
 void eyaml_destroy(struct eyaml* root);
 
-/** Search in a mpping member node by its name
+/** Search in a mapping member node by its name
   * @param [in] self The easy-yaml parent mapping node where to search
   * @param [in] name The name of the child node to find
   * @return The easy-yaml node on found, null pointer on other cases */
 struct eyaml* eyaml_name2child(struct eyaml* self, char const* name);
 
-/** Search in a mpping or sequence member node by its index
+/** Search in a mapping or sequence member node by its index
   * @param [in] self   The easy-yaml parent mapping or sequence node where to search
   * @param [in] index The index of the child node to find
   * @return The easy-yaml node on found, null pointer on other cases */
 struct eyaml* eyaml_index2child(struct eyaml* self, int i);
 
-/** Get the first child of a sequence or mappind node
+/** Get the first child of a sequence or mapping node
   * @param [in] self   The easy-yaml parent mapping or sequence node where to search
   * @return If has any children the easy-yaml node else a null pointer */
 static inline struct eyaml* eyaml_child(struct eyaml* self) {
@@ -60,9 +60,9 @@ static inline int eyaml_haschildren(struct eyaml* parent) {
     return NULL != eyaml_child(parent);
 }
 
-/** Get the next siblibg of a easy-yaml node
+/** Get the next sibling of a easy-yaml node
   * @param [in] self A valid handle of a easy-yaml node
-  * @return If has any siblibg the handle else null pointer */
+  * @return If has any sibling the handle else null pointer */
 struct eyaml* eyaml_sibling(struct eyaml* self);
 
 /** Get the length of a easy-yaml node
@@ -89,18 +89,18 @@ char const* eyaml_name(struct eyaml* self);
   * @return A null-terminates string with the value, null on not a scalar node */
 char const* eyaml_value(struct eyaml* self);
 
-/** Search in a mpping a scalar member node by its name and get its value
+/** Search in a mapping a scalar member node by its name and get its value
   * @param [in] self A valid handle of a easy-yaml node
   * @param [in] name The name of the child node to find
-  * @return A null-terminates string with the value on found a scalar meber, null pointer on other cases */
+  * @return A null-terminates string with the value on found a scalar member, null pointer on other cases */
 static inline char const* eyaml_name2value(struct eyaml* self, char const* name) {
     return eyaml_value( eyaml_name2child(self, name) );
 }
 
-/** Search in a mpping or sequence a scalar member node by its index and get its value
+/** Search in a mapping or sequence a scalar member node by its index and get its value
   * @param [in] self  The easy-yaml parent mapping or sequence node where to search
   * @param [in] index The index of the child node to find
-  * @return A null-terminates string with the value on found a scalar meber, null pointer on other cases */
+  * @return A null-terminates string with the value on found a scalar member, null pointer on other cases */
 static inline char const* eyaml_index2value(struct eyaml* self, int i) {
     return eyaml_value( eyaml_index2child(self, i) );
 }
@@ -138,4 +138,4 @@ void eyaml_debug(struct eyaml* self);
 }
 #endif
 
-#endif /* EASY_YALM_H */
+#endif /* EASY_YAML_H */

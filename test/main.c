@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
         return 1;
     }
     assert(root);
-    assert(YAML_SEQUENCE == eyaml_type(root));
+    assert(EYAML_SEQUENCE == eyaml_type(root));
 
     puts("\n\tDEBUG\n");
     eyaml_debug(root);
@@ -22,14 +22,14 @@ int main(int argc, char** argv) {
 
     struct eyaml* doc  = eyaml_index2child(root, 0);
     assert(doc);
-    assert(YAML_MAPPING == eyaml_type(doc));
+    assert(EYAML_MAPPING == eyaml_type(doc));
 
     printf("doc len: %d\n", eyaml_length(doc));
 
 
     struct eyaml* name = eyaml_name2child(doc, "name");
     assert(name);
-    assert(YAML_SCALAR == eyaml_type(name));
+    assert(EYAML_SCALAR == eyaml_type(name));
 
     char const* nameval = eyaml_name2value(doc, "name");
     assert(nameval);
@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 
     struct eyaml* data = eyaml_name2child(doc, "data");
     assert(data);
-    assert(YAML_MAPPING == eyaml_type(data));
+    assert(EYAML_MAPPING == eyaml_type(data));
 
     struct {
         char const* age;
@@ -49,15 +49,15 @@ int main(int argc, char** argv) {
 
     struct eyaml* age = eyaml_name2child(data, "age");
     assert(age);
-    assert(YAML_SCALAR == eyaml_type(age));
+    assert(EYAML_SCALAR == eyaml_type(age));
 
     struct eyaml* color = eyaml_name2child(data, "color");
     assert(color);
-    assert(YAML_SCALAR == eyaml_type(color));
+    assert(EYAML_SCALAR == eyaml_type(color));
 
     struct eyaml* scores = eyaml_name2child(doc, "scores");
     assert(scores);
-    assert(YAML_SEQUENCE == eyaml_type(scores));
+    assert(EYAML_SEQUENCE == eyaml_type(scores));
     assert(3 == eyaml_length(scores));
 
     puts("\n\tEMIT\n");
