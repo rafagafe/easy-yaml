@@ -9,7 +9,7 @@ Visit [Learn Easy YAML by example](https://github.com/rafagafe/easy-yaml/wiki/Le
 
 Route map:
 
-- [ ] Find YMAL nodes and values by their paths
+- [ ] Find YAML nodes and values by their paths
 - [ ] Support alias event
 - [ ] Cunit tests
 - [ ] Create new YAML trees and edit
